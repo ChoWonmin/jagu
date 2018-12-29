@@ -1,2 +1,4 @@
 # jagu
-# jagu
+
+Data Structure and Visualization javascript library
+

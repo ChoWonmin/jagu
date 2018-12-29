@@ -1,2 +1,5 @@
-console.log('jagu !!!');
+const stack = require('./src/stack');
 
+module.exports = {
+  stack
+};

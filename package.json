@@ -1,8 +1,8 @@
 {
   "name": "jagu",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "1.0.1",
+  "description": "Data Structure and Visualization javascript library",
+  "main": "index.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,12 +11,16 @@
     "url": "git+https://github.com/ChoWonmin/jagu.git"
   },
   "keywords": [
-    "datastructure"
+    "datastructure",
+    "visualization"
   ],
-  "author": "ChoWonmin",
+  "author": "wonmin",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ChoWonmin/jagu/issues"
   },
-  "homepage": "https://github.com/ChoWonmin/jagu#readme"
+  "homepage": "https://github.com/ChoWonmin/jagu#readme",
+  "dependencies": {
+    "d3": "^5.7.0"
+  }
 }
