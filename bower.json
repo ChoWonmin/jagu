@@ -1,0 +1,15 @@
+{
+  "name": "jagu",
+  "main": "dist/jagu.js",
+  "license": "MIT",
+  "ignore": [
+    "package.json"
+  ],
+  "keywords": [
+    "datastructure",
+    "visualization",
+    "javascript",
+    "browser",
+    "library"
+  ]
+}

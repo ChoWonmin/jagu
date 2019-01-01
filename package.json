@@ -1,10 +1,13 @@
 {
   "name": "jagu",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Data Structure and Visualization javascript library",
-  "main": "index.mjs",
+  "main": "js/jagu.min.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "browserify": "browserify js/jagu.js -t --outfile js/jagu.browser.js",
+    "prod": "webpack --mode=production",
+    "dev": "webpack --mode=development"
   },
   "repository": {
     "type": "git",
@@ -12,7 +15,10 @@
   },
   "keywords": [
     "datastructure",
-    "visualization"
+    "visualization",
+    "javascript",
+    "browser",
+    "library"
   ],
   "author": "wonmin",
   "license": "MIT",
@@ -21,6 +27,25 @@
   },
   "homepage": "https://github.com/ChoWonmin/jagu#readme",
   "dependencies": {
-    "d3": "^5.7.0"
-  }
+    "@babel/polyfill": "^7.2.5",
+    "babelify": "^8.0.0",
+    "browserify": "^16.2.3",
+    "d3": "^5.7.0",
+    "pack-cli": "^1.4.5",
+    "path": "^0.12.7",
+    "web": "0.0.2",
+    "webpack": "^4.28.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "webpack-cli": "^3.1.2"
+  },
+  "transform": [
+    [
+      "babelify",
+      {
+        "comments": false
+      }
+    ]
+  ]
 }

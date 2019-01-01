@@ -78,4 +78,4 @@ const stack = () => {
   };
 };
 
-module.exports = stack;
+export default stack;
