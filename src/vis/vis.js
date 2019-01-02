@@ -6,16 +6,22 @@
  * @param {Object} [datastructure] jagu datastructure
  */
 
-import d3 from 'd3';
-import stackVis from './lib/stackVis;'
+import * as d3 from 'd3';
+import stackVis from './lib/stackVis';
+
+window.d3 = d3;
 
 const vis = (render, datastructure) => {
 
   const renderer = d3.select(render);
   const data = datastructure;
 
+  const stack = () => stackVis(renderer, data);
+
   return {
-    stack: stackVis(render, data)
+    stack,
   }
 
 };
+
+export default vis;

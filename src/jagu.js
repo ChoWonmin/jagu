@@ -7,6 +7,7 @@ import queue from './lib/queue';
 import set from './lib/set';
 import stack from './lib/stack';
 import trie from './lib/trie';
+import vis from './vis/vis';
 
 window.jagu = {
   avlTree,
@@ -17,5 +18,6 @@ window.jagu = {
   priorityQueue,
   set,
   stack,
-  trie
+  trie,
+  vis
 };

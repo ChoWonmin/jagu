@@ -3,20 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>-->
   <script src="./js/jagu.min.js"></script>
-  <script src="./src/vis/lib/stackVis.js"></script>
+  <!--<script src="./src/vis/lib/stackVis.js"></script>-->
   <style>
     svg.stack {
-      width: 480px;
+      width: 200px;
       height: 480px;
       background-color: #ececec;
     }
+  .btn {
+    width: 96px;
+    height: 32px;
+    background-color: #ffbc73;
+    border-radius: 4px;
+    color: #fff;
+    text-align: center;
+    line-height: 32px;
+    margin: 8px;
+  }
+
+  input {
+    height: 32px;
+    text-indent: 8px;
+  }
+
+  .wrapper {
+    display: flex;
+  }
+
   </style>
 </head>
 <body>
+  <div class="wrapper">
+    <svg class="stack"></svg>
 
-  <svg class="stack"></svg>
+    <input id="stack-push-input" placeholder="push value">
+    <div id="stack-push-btn" class="btn">
+      push
+    </div>
+
+    <div id='stack-pop-btn' class="btn">
+      pop
+    </div>
+  </div>
 
   <script>
     const stack = jagu.stack();
@@ -25,12 +55,19 @@
       stack.push(i);
     }
 
-    const sv = stackVis(d3.select('.stack'), stack);
+    const stackVis = jagu.vis('.stack', stack).stack();
 
-    sv.draw();
+    stackVis.draw();
 
-    sv.push(5);
-    sv.push(6);
+    document.getElementById('stack-push-btn').addEventListener('click', ()=>{
+      const val = document.getElementById('stack-push-input').value;
+      stackVis.push(val);
+    });
+
+    document.getElementById('stack-pop-btn').addEventListener('click', ()=>{
+      stackVis.pop();
+    });
+
   </script>
 </body>
 </html>

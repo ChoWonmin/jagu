@@ -6,33 +6,36 @@
  * @param {Object} [datastructure] jagu datastructure
  */
 
-const stackVis = (renderer, data) => {
+const stackVis = (renderer, datastructure) => {
 
-  this.root = renderer;
-  this.backgroundG = this.root.append('g');
-  this.foregroundG = this.root.append('g');
-  this.activeG = this.root.append('g');
+  console.log(renderer);
+
+  const root = renderer;
+  const backgroundG = root.append('g');
+  const foregroundG = root.append('g');
+  const activeG = root.append('g');
 
   /**
    * canvas width
    * @property {number}
    */
-  this.width = this.root.node().getBoundingClientRect().width;
+  const width = root.node().getBoundingClientRect().width;
   /**
    * canvas height
    * @property {number}
    */
-  this.height = this.root.node().getBoundingClientRect().height;
+  const height = root.node().getBoundingClientRect().height;
 
-  this.data = data;
+  const data = datastructure;
 
-  this.margin = 30;
-  this.padding = 6;
-  this.stackBox = {
+  const margin = 30;
+
+  const stackBox = {
     width: 140,
     height: 30,
     color: '#ff6f74',
-    fontColor: '#dedede'
+    fontColor: '#dedede',
+    padding: 6
   };
 
   const scroll = (target) => {
@@ -61,89 +64,98 @@ const stackVis = (renderer, data) => {
   const draw = () => {
     clear();
 
-    this.backgroundG.append('rect')
-      .attr('x', this.margin)
+    backgroundG.append('rect')
+      .attr('x', margin)
       .attr('y', 0)
-      .attr('width', this.stackBox.width)
-      .attr('height', this.height)
+      .attr('width', stackBox.width)
+      .attr('height', height)
       .attr('fill', '#adefde');
 
-    this.data.toArray().forEach( (e,i) => {
+    data.toArray().forEach( (e,i) => {
 
-      this.foregroundG.append('rect')
-        .attr('x', this.margin + this.padding)
-        .attr('y', this.height - (this.stackBox.height + this.padding) * (i+1) )
-        .attr('width', this.stackBox.width - 2 * this.padding)
-        .attr('height', this.stackBox.height)
-        .attr('fill', this.stackBox.color)
+      foregroundG.append('rect')
+        .attr('x', margin + stackBox.padding)
+        .attr('y', height - (stackBox.height + stackBox.padding) * (i+1) )
+        .attr('width', stackBox.width - 2 * stackBox.padding)
+        .attr('height', stackBox.height)
+        .attr('fill', stackBox.color)
         .attr('opacity', 1);
 
-      console.log(this.height - (this.stackBox.height + this.padding) * (i+1));
-
-      this.foregroundG.append('text')
-        .attr('x', this.margin + this.stackBox.width/2)
-        .attr('y', this.height + this.stackBox.height/2 - (this.stackBox.height + this.padding) * (i+1))
-        .attr('fill', this.stackBox.fontColor)
+      foregroundG.append('text')
+        .attr('x', margin + stackBox.width/2)
+        .attr('y', height + stackBox.height/2 - (stackBox.height + stackBox.padding) * (i+1))
+        .attr('fill', stackBox.fontColor)
         .attr('text-anchor', 'middle')
         .attr('alignment-baseline', 'middle')
         .text(e);
     });
 
-    scroll(this.foregroundG);
+    scroll(foregroundG);
   };
 
   const push = (ele) => {
-    this.data.push(ele);
+    data.push(ele);
 
-    const top = this.foregroundG.selectAll('rect').filter((d,i,list) => i === list.length-1);
-
-    // .transition()
-    //   .delay(300)
-    //   .duration(500)
-    //   .attr('y', 0);
-
-    console.log(top.node().getBoundingClientRect());
-
-    this.foregroundG.append('rect')
-      .attr('x', this.margin + this.padding)
+    foregroundG.append('rect')
+      .attr('x', margin + stackBox.padding)
       .attr('y', 0)
-      .attr('width', this.stackBox.width - 2 * this.padding)
-      .attr('height', this.stackBox.height)
-      .attr('fill', this.stackBox.color)
+      .attr('width', stackBox.width - 2 * stackBox.padding)
+      .attr('height', stackBox.height)
+      .attr('fill', stackBox.color)
       .attr('opacity', 1)
       .transition()
-      .delay(500)
+      .delay(50)
       .duration(800)
-      .attr('y', this.height - (this.stackBox.height + this.padding) * (this.data.toArray().length));
+      .attr('y', height - (stackBox.height + stackBox.padding) * (data.toArray().length));
 
-    this.foregroundG.append('text')
-      .attr('x', this.margin + this.stackBox.width/2)
-      .attr('y', 0 + this.stackBox.height/2)
-      .attr('fill', this.stackBox.fontColor)
+    foregroundG.append('text')
+      .attr('x', margin + stackBox.width/2)
+      .attr('y', 0 + stackBox.height/2)
+      .attr('fill', stackBox.fontColor)
       .attr('text-anchor', 'middle')
       .attr('alignment-baseline', 'middle')
       .text(ele)
       .transition()
-      .delay(500)
+      .delay(50)
       .duration(800)
-      .attr('y', this.height + this.stackBox.height/2 - (this.stackBox.height + this.padding) * (this.data.toArray().length));
+      .attr('y', height + stackBox.height/2 - (stackBox.height + stackBox.padding) * (data.toArray().length))
+      .on('end', ()=>{draw()});
   };
 
   const pop = () => {
-    this.data.pop();
-    draw();
+    data.pop();
+
+    const top = {
+      rect: foregroundG.selectAll('rect').filter((d,i,list) => i===list.length-1),
+      text: foregroundG.selectAll('text').filter((d,i,list) => i===list.length-1)
+    };
+
+    top.rect.transition()
+      .delay(50)
+      .duration(800)
+      .attr('y', - stackBox.height);
+
+    top.text.transition()
+      .delay(50)
+      .duration(800)
+      .attr('y', - stackBox.height)
+      .on('end', ()=>{draw()});
+
   };
 
   const clear = () => {
-    this.backgroundG.selectAll('*').remove();
-    this.foregroundG.selectAll('*').remove();
-    this.activeG.selectAll('*').remove();
+    backgroundG.selectAll('*').remove();
+    foregroundG.selectAll('*').remove();
+    activeG.selectAll('*').remove();
   };
 
   return {
     draw,
     push,
+    pop,
     clear
   }
 
 };
+
+export default stackVis;
