@@ -7,6 +7,7 @@
 const stack = () => {
   let top = 0;
   let elements = [];
+  let dataType = 'stack';
 
   /**
    * @returns {number}
@@ -67,6 +68,10 @@ const stack = () => {
     elements = [];
   };
 
+  const getDataType = () => dataType;
+
+  const toArray = () => elements.slice(1, top);
+
   // stack api
   return {
     length,
@@ -74,7 +79,9 @@ const stack = () => {
     push,
     pop,
     peek,
-    clear
+    clear,
+    getDataType,
+    toArray
   };
 };
 
