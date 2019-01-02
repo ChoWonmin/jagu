@@ -3,31 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
   <script src="./js/jagu.min.js"></script>
+  <script src="./src/vis/lib/stackVis.js"></script>
+  <style>
+    svg.stack {
+      width: 480px;
+      height: 480px;
+      background-color: #ececec;
+    }
+  </style>
 </head>
 <body>
 
+  <svg class="stack"></svg>
+
   <script>
     const stack = jagu.stack();
-    stack.push(0);
-    stack.push(1);
-    stack.push(2);
-    console.log(stack.pop());
-    console.log(stack.pop());
-    console.log(stack.pop());
-    console.log(stack.pop());
 
-    const graph = jagu.graph();
-    graph.addVertex('v1', 10);
-    graph.addVertex('v2', 10);
-    graph.addVertex('v3', 10);
-    graph.addVertex('v4', 10);
-    graph.addVertex('v5', 10);
+    for (let i=0; i<5; i++) {
+      stack.push(i);
+    }
 
-    graph.addEdge('v1', 'v2', 3);
-    graph.addEdge('v1', 'v3', 3);
-    graph.addEdge('v2', 'v3', 3);
+    const sv = stackVis(d3.select('.stack'), stack);
 
+    sv.draw();
+
+    sv.push(5);
+    sv.push(6);
   </script>
 </body>
 </html>

@@ -70,7 +70,7 @@ const stack = () => {
 
   const getDataType = () => dataType;
 
-  const toArray = () => elements.slice(1, top);
+  const toArray = () => elements.slice(0, top);
 
   // stack api
   return {
