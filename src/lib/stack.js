@@ -7,7 +7,6 @@
 const stack = () => {
   let top = 0;
   let elements = [];
-  let dataType = 'stack';
 
   /**
    * @returns {number}
