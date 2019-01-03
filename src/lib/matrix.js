@@ -46,22 +46,43 @@ const matrix = ( c, r, value = 0 ) => {
 
   const add = (mat) => {
     if (row === mat.getRow() && col === mat.getCol()) {
-
-      each( (e, c, r) => {
-         setValue(c, r, e + mat.getValue(c,r));
+      const res = clone();
+      res.each( (e, c, r) => {
+         res.setValue(c, r, e + mat.getValue(c,r));
       });
 
-      console.log(this, 'this');
-      return this;
+      return res;
     }
     return null;
   };
 
   const multiScala = (k) => {
-    each((e,c,r) => {
+    const res = clone();
+
+    res.each((e,c,r) => {
       setValue(c, r, e*k);
     });
-    return this;
+
+    return res;
+  };
+
+  const multi = (mat) => {
+    if (row === mat.getCol()) {
+      const res = matrix(col, mat.getRow());
+
+      res.each((e,c,r) => {
+        let val = 0;
+
+        for (let i=0; i<row; i++) {
+          val += getValue(c,i) * mat.getValue(i,r);
+        }
+
+        res.setValue(c,r, val);
+      });
+
+      return res;
+    }
+    return null;
   };
 
   const toArray2D = () => elements;
@@ -87,22 +108,11 @@ const matrix = ( c, r, value = 0 ) => {
     clone,
     add,
     multiScala,
+    multi,
     toArray2D,
     toArray
   };
 
 };
 
-// const m1 = matrix(2,3, 3);
-// const m2 = matrix(2,3, 3);
-// const m3 = matrix(2,2, 3);
-//
-// console.log(m1.toArray2D());
-// console.log(m1.clone().toArray2D());
-// console.log(m1.add(m2).toArray2D());
-//
-// m1.multyScala(3);
-// console.log(m1.toArray2D());
-
 export default matrix;
-
