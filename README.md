@@ -9,11 +9,16 @@
 npm install jagu
 ```
 
-## Including jagu
+## Including in browser
 
-### Vue
+### Babel
 ```js
-import 'jagu';
+import "jagu";
+```
+
+### Script tag
+```html
+<script src="node_modules/jagu"></script>
 ```
 
 ## Usage

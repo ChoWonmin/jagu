@@ -9,19 +9,24 @@
 import * as d3 from 'd3';
 import stackVis from './lib/stackVis';
 
-window.d3 = d3;
+const isBrowser = new Function("try {return this===window;}catch(e){ return false;}");
 
-const vis = (render, datastructure) => {
+let vis = null;
 
-  const renderer = d3.select(render);
-  const data = datastructure;
+if(isBrowser()) {
+  window.d3 = d3;
+  vis = (render, datastructure) => {
 
-  const stack = () => stackVis(renderer, data);
+    const renderer = d3.select(render);
+    const data = datastructure;
 
-  return {
-    stack,
-  }
+    const stack = () => stackVis(renderer, data);
 
-};
+    return {
+      stack,
+    }
+
+  };
+}
 
 export default vis;

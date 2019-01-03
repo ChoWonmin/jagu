@@ -10,7 +10,7 @@ import stack from './lib/stack';
 import trie from './lib/trie';
 import vis from './vis/vis';
 
-window.jagu = {
+const jagu = {
   avlTree,
   binarySearchTree,
   graph,
@@ -21,5 +21,13 @@ window.jagu = {
   set,
   stack,
   trie,
-  vis
 };
+
+const isBrowser = new Function("try {return this===window;}catch(e){ return false;}");
+
+if (isBrowser()) {
+  jagu.vis = vis;
+  window.jagu = jagu;
+}
+
+export default jagu;

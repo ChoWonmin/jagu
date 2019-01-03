@@ -93,7 +93,6 @@ const matrix = ( c, r, value = 0 ) => {
 
 };
 
-
 // const m1 = matrix(2,3, 3);
 // const m2 = matrix(2,3, 3);
 // const m3 = matrix(2,2, 3);

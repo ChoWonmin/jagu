@@ -1,6 +1,6 @@
 {
   "name": "jagu",
-  "version": "1.0.6",
+  "version": "1.0.10",
   "description": "Data Structure and Visualization javascript library",
   "main": "js/jagu.min.js",
   "scripts": {
@@ -27,7 +27,8 @@
     "url": "https://github.com/ChoWonmin/jagu/issues"
   },
   "homepage": "https://github.com/ChoWonmin/jagu#readme",
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {
     "@babel/polyfill": "^7.2.5",
     "babel-cli": "^6.26.0",
