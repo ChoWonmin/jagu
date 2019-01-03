@@ -11,9 +11,9 @@ npm install jagu
 
 ## Including jagu
 
-### Node package
+### Vue
 ```js
-import jagu from 'jagu';
+import 'jagu';
 ```
 
 ## Usage
@@ -36,9 +36,10 @@ const trie = jagu.trie();
 const stack = jagu.stack();
 
 /**
-* @name vis
-* @param svg tag, datastructure
-*/
+ * @name vis
+ * @param {String} [renderer] html svg tag
+ * @param {Object} [datastructure] jagu datastructure
+ */
 const stackVis = jagu.vis('.stack', stack).stack();  
 ```
 

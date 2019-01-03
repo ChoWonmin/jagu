@@ -8,8 +8,6 @@
 
 const stackVis = (renderer, datastructure) => {
 
-  console.log(renderer);
-
   const root = renderer;
   const backgroundG = root.append('g');
   const foregroundG = root.append('g');
@@ -37,6 +35,8 @@ const stackVis = (renderer, datastructure) => {
     fontColor: '#dedede',
     padding: 6
   };
+
+  const duration = 700;
 
   const scroll = (target) => {
     let startY = 0;
@@ -104,8 +104,7 @@ const stackVis = (renderer, datastructure) => {
       .attr('fill', stackBox.color)
       .attr('opacity', 1)
       .transition()
-      .delay(50)
-      .duration(800)
+      .duration(duration)
       .attr('y', height - (stackBox.height + stackBox.padding) * (data.toArray().length));
 
     foregroundG.append('text')
@@ -116,8 +115,7 @@ const stackVis = (renderer, datastructure) => {
       .attr('alignment-baseline', 'middle')
       .text(ele)
       .transition()
-      .delay(50)
-      .duration(800)
+      .duration(duration)
       .attr('y', height + stackBox.height/2 - (stackBox.height + stackBox.padding) * (data.toArray().length))
       .on('end', ()=>{draw()});
   };
@@ -131,13 +129,11 @@ const stackVis = (renderer, datastructure) => {
     };
 
     top.rect.transition()
-      .delay(50)
-      .duration(800)
+      .duration(duration)
       .attr('y', - stackBox.height);
 
     top.text.transition()
-      .delay(50)
-      .duration(800)
+      .duration(duration)
       .attr('y', - stackBox.height)
       .on('end', ()=>{draw()});
 
