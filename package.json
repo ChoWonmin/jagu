@@ -1,6 +1,6 @@
 {
   "name": "jagu",
-  "version": "1.0.10",
+  "version": "1.0.12",
   "description": "Data Structure and Visualization javascript library",
   "main": "js/jagu.min.js",
   "scripts": {

@@ -6,22 +6,15 @@
  * @param {Object} [datastructure] jagu datastructure
  */
 
-const stackVis = (renderer, datastructure) => {
+const queueVis = (renderer, datastructure) => {
 
   const root = renderer;
   const backgroundG = root.append('g');
   const foregroundG = root.append('g');
   const activeG = root.append('g');
 
-  /**
-   * canvas width
-   * @property {number}
-   */
   const width = root.node().getBoundingClientRect().width;
-  /**
-   * canvas height
-   * @property {number}
-   */
+
   const height = root.node().getBoundingClientRect().height;
 
   const data = datastructure;
@@ -53,10 +46,6 @@ const stackVis = (renderer, datastructure) => {
       .attr('fill', stackBox.fontColor)
       .attr('alignment-baseline', 'middle')
       .text(text);
-
-    const transition = (t) => {
-      rect.transition
-    };
 
     return {
       rect,
@@ -104,25 +93,37 @@ const stackVis = (renderer, datastructure) => {
     scroll(foregroundG);
   };
 
-  const push = (ele) => {
-    data.push(ele);
+  const enqueue = (ele) => {
+    data.enqueue(ele);
 
-    const box = drawBox(margin + stackBox.padding, 0, ele);
-
-    box.rect
+    foregroundG.append('rect')
+      .attr('x', margin + stackBox.padding)
+      .attr('y', 0)
+      .attr('width', stackBox.width - 2 * stackBox.padding)
+      .attr('height', stackBox.height)
+      .attr('fill', stackBox.color)
+      .attr('opacity', 1)
       .transition()
       .duration(duration)
       .attr('y', height - (stackBox.height + stackBox.padding) * (data.toArray().length));
 
-    box.text
+    foregroundG.append('text')
+      .attr('x', margin + stackBox.width/2)
+      .attr('y', 0 + stackBox.height/2)
+      .attr('fill', stackBox.fontColor)
+      .attr('text-anchor', 'middle')
+      .attr('alignment-baseline', 'middle')
+      .text(ele)
       .transition()
       .duration(duration)
       .attr('y', height + stackBox.height/2 - (stackBox.height + stackBox.padding) * (data.toArray().length))
       .on('end', ()=>{draw()});
+
   };
 
-  const pop = () => {
-    data.pop();
+  const dequeue = () => {
+
+    data.dequeue();
 
     const top = {
       rect: foregroundG.selectAll('rect').filter((d,i,list) => i===list.length-1),
@@ -148,11 +149,11 @@ const stackVis = (renderer, datastructure) => {
 
   return {
     draw,
-    push,
-    pop,
+    enqueue,
+    dequeue,
     clear
   }
 
 };
 
-export default stackVis;
+export default queueVis;

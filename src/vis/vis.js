@@ -8,6 +8,7 @@
 
 import * as d3 from 'd3';
 import stackVis from './lib/stackVis';
+import queueVis from './lib/queueVis';
 
 const isBrowser = new Function("try {return this===window;}catch(e){ return false;}");
 
@@ -21,9 +22,11 @@ if(isBrowser()) {
     const data = datastructure;
 
     const stack = () => stackVis(renderer, data);
+    const queue = () => queueVis(renderer, data);
 
     return {
       stack,
+      queue
     }
 
   };
