@@ -1,13 +1,12 @@
 /**
  * @copyright 2019 ChoWonmin <0108257@gmail.com>
  * @license MIT
- * @description stack visualization library
+ * @description priority queue visualization library
  * @param {Object} [renderer] d3 render object
  * @param {Object} [datastructure] jagu datastructure
  */
-import util from '../util/util';
 
-const stackVis = (renderer, datastructure) => {
+const priorityQueueVis = (renderer, datastructure) => {
 
   const root = renderer;
   const backgroundG = root.append('g');
@@ -15,15 +14,10 @@ const stackVis = (renderer, datastructure) => {
   const activeG = root.append('g');
 
   const width = root.node().getBoundingClientRect().width;
+
   const height = root.node().getBoundingClientRect().height;
 
   const data = datastructure;
-
-  /**
-   * animation synchronize check
-   * @property {boolean}
-   */
-  let lock = false;
 
   const margin = 30;
 
@@ -100,53 +94,53 @@ const stackVis = (renderer, datastructure) => {
     scroll(foregroundG);
   };
 
-  const push = (ele) => {
+  const enqueue = (ele, priority) => {
+    data.enqueue(ele, priority);
 
-    if(!lock) {
-      lock = true;
-      data.push(ele);
+    const box = drawBox(margin + boxProps.padding, 0, ele);
 
-      const box = drawBox(margin + boxProps.padding, 0, ele);
+    box.rect
+      .transition()
+      .duration(duration)
+      .attr('y', height - (boxProps.height + boxProps.padding) * (data.toArray().length));
 
-      box.rect
-        .transition()
-        .duration(duration)
-        .attr('y', height - (boxProps.height + boxProps.padding) * (data.toArray().length));
-
-      box.text
-        .transition()
-        .duration(duration)
-        .attr('y', height + boxProps.height/2 - (boxProps.height + boxProps.padding) * (data.toArray().length))
-        .on('end', ()=>{
-          lock = false;
-        });
-    }
+    box.text
+      .transition()
+      .duration(duration)
+      .attr('y', height + boxProps.height/2 - (boxProps.height + boxProps.padding) * (data.toArray().length))
   };
 
-  const pop = () => {
+  const dequeue = () => {
+    data.dequeue();
 
-    if (!lock) {
-      lock = true;
-      data.pop();
+    const front = {
+      rect: foregroundG.selectAll('rect').filter((d,i) => i===0),
+      text: foregroundG.selectAll('text').filter((d,i) => i===0)
+    };
 
-      const top = {
-        rect: foregroundG.selectAll('rect').filter((d,i,list) => i===list.length-1),
-        text: foregroundG.selectAll('text').filter((d,i,list) => i===list.length-1)
-      };
+    front.rect.transition()
+      .duration(duration)
+      .attr('y', height);
 
-      top.rect.transition()
-        .duration(duration)
-        .attr('y', - boxProps.height);
+    front.text.transition()
+      .duration(duration)
+      .attr('y', height)
+      .on('end', () => {
+        front.rect.remove();
+        front.text.remove();
 
-      top.text.transition()
-        .duration(duration)
-        .attr('y', - boxProps.height)
-        .on('end', ()=>{
-          top.rect.remove();
-          top.text.remove();
-          lock = false;
-        });
-    }
+        foregroundG.selectAll('rect').transition()
+          .delay(duration)
+          .duration(duration)
+          .attr('y', (e,i) => height - (boxProps.height + boxProps.padding) * (i+1));
+
+        foregroundG.selectAll('text').transition()
+          .delay(duration)
+          .duration(duration)
+          .attr('y', (e,i) => height + boxProps.height/2 - (boxProps.height + boxProps.padding) * (i+1));
+
+      });
+
   };
 
   const clear = () => {
@@ -157,11 +151,11 @@ const stackVis = (renderer, datastructure) => {
 
   return {
     draw,
-    push,
-    pop,
+    enqueue,
+    dequeue,
     clear
   }
 
 };
 
-export default stackVis;
+export default queueVis;

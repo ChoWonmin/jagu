@@ -57,9 +57,18 @@ const util = () => {
 
   };
 
+  const syncronize = (lock, func) => {
+    if (!lock) {
+      lock = true;
+      func();
+      lock = false;
+    }
+  };
+
   return {
     drawShape,
     move,
+    syncronize
   };
 
 };

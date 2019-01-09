@@ -19,6 +19,12 @@ const queueVis = (renderer, datastructure) => {
 
   const data = datastructure;
 
+  /**
+   * animation synchronize check
+   * @property {boolean}
+   */
+  let lock = false;
+
   const margin = 30;
 
   const boxProps = {
@@ -29,7 +35,7 @@ const queueVis = (renderer, datastructure) => {
     padding: 6
   };
 
-  const duration = 700;
+  const duration = 400;
 
   const drawBox = (x, y, text) => {
     const rect = foregroundG.append('rect')
@@ -95,52 +101,71 @@ const queueVis = (renderer, datastructure) => {
   };
 
   const enqueue = (ele) => {
-    data.enqueue(ele);
+    if (!lock) {
+      lock = true;
 
-    const box = drawBox(margin + boxProps.padding, 0, ele);
+      data.enqueue(ele);
 
-    box.rect
-      .transition()
-      .duration(duration)
-      .attr('y', height - (boxProps.height + boxProps.padding) * (data.toArray().length));
+      const box = drawBox(margin + boxProps.padding, 0, ele);
 
-    box.text
-      .transition()
-      .duration(duration)
-      .attr('y', height + boxProps.height/2 - (boxProps.height + boxProps.padding) * (data.toArray().length))
+      box.rect
+        .transition()
+        .duration(duration)
+        .attr('y', height - (boxProps.height + boxProps.padding) * (data.toArray().length));
+
+      box.text
+        .transition()
+        .duration(duration)
+        .attr('y', height + boxProps.height/2 - (boxProps.height + boxProps.padding) * (data.toArray().length))
+        .on('end', ()=>{
+          lock = false;
+        });
+
+    }
+
 
   };
 
   const dequeue = () => {
-    data.dequeue();
 
-    const front = {
-      rect: foregroundG.selectAll('rect').filter((d,i) => i===0),
-      text: foregroundG.selectAll('text').filter((d,i) => i===0)
-    };
+    if (!lock) {
+      lock = true;
+      data.dequeue();
 
-    front.rect.transition()
-      .duration(duration)
-      .attr('y', height);
+      const front = {
+        rect: foregroundG.selectAll('rect').filter((d,i) => i===0),
+        text: foregroundG.selectAll('text').filter((d,i) => i===0)
+      };
 
-    front.text.transition()
-      .duration(duration)
-      .attr('y', height)
-      .on('end', () => {
-        front.rect.remove();
-        front.text.remove();
+      front.rect.transition()
+        .duration(duration)
+        .attr('y', height);
 
-        foregroundG.selectAll('rect').transition()
-          .delay(duration)
-          .duration(duration)
-          .attr('y', (e,i) => height - (boxProps.height + boxProps.padding) * (i+1));
+      front.text.transition()
+        .duration(duration)
+        .attr('y', height)
+        .on('end', () => {
+          front.rect.remove();
+          front.text.remove();
 
-        foregroundG.selectAll('text').transition()
-          .delay(duration)
-          .duration(duration)
-          .attr('y', (e,i) => height + boxProps.height/2 - (boxProps.height + boxProps.padding) * (i+1));
+          foregroundG.selectAll('rect').transition()
+            .delay(duration)
+            .duration(duration)
+            .attr('y', (e,i) => height - (boxProps.height + boxProps.padding) * (i+1));
 
-      });
+          foregroundG.selectAll('text').transition()
+            .delay(duration)
+            .duration(duration)
+            .attr('y', (e,i) => height + boxProps.height/2 - (boxProps.height + boxProps.padding) * (i+1))
+            .on('end', ()=>{
+              lock = false;
+            });
+        });
+    }
+
+
+
+
 
   };
 
