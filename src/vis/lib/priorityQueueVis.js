@@ -19,6 +19,8 @@ const priorityQueueVis = (renderer, datastructure) => {
 
   const data = datastructure;
 
+  let lock = false;
+
   const margin = 30;
 
   const boxProps = {
@@ -29,7 +31,7 @@ const priorityQueueVis = (renderer, datastructure) => {
     padding: 6
   };
 
-  const duration = 400;
+  const duration = 1000;
 
   const drawBox = (x, y, text) => {
     const rect = foregroundG.append('rect')
@@ -37,13 +39,13 @@ const priorityQueueVis = (renderer, datastructure) => {
       .attr('y', y)
       .attr('width', boxProps.width - 2 * boxProps.padding)
       .attr('height', boxProps.height)
-      .attr('fill', boxProps.color)
+      .attr('fill', '#eee17f')
       .attr('opacity', 1);
 
     const t = foregroundG.append('text')
       .attr('x', x + boxProps.width/2 - 4)
       .attr('y', y + boxProps.height/2)
-      .attr('fill', boxProps.fontColor)
+      .attr('fill', '#4b4b4b')
       .attr('alignment-baseline', 'middle')
       .attr('text-anchor', 'middle')
       .text(text);
@@ -88,7 +90,17 @@ const priorityQueueVis = (renderer, datastructure) => {
       .attr('fill', '#adefde');
 
     data.toArray().forEach( (e,i) => {
-      drawBox(margin + boxProps.padding, height - (boxProps.height + boxProps.padding) * (i+1), e);
+      const box = drawBox(margin + boxProps.padding, height - (boxProps.height + boxProps.padding) * (i+1), e);
+
+      box.rect
+        .transition()
+        .duration(duration)
+        .attr('fill', boxProps.color);
+
+      box.text
+        .transition()
+        .duration(duration)
+        .attr('fill', boxProps.fontColor);
     });
 
     scroll(foregroundG);
@@ -96,18 +108,7 @@ const priorityQueueVis = (renderer, datastructure) => {
 
   const enqueue = (ele, priority) => {
     data.enqueue(ele, priority);
-
-    const box = drawBox(margin + boxProps.padding, 0, ele);
-
-    box.rect
-      .transition()
-      .duration(duration)
-      .attr('y', height - (boxProps.height + boxProps.padding) * (data.toArray().length));
-
-    box.text
-      .transition()
-      .duration(duration)
-      .attr('y', height + boxProps.height/2 - (boxProps.height + boxProps.padding) * (data.toArray().length))
+    draw();
   };
 
   const dequeue = () => {
@@ -158,4 +159,4 @@ const priorityQueueVis = (renderer, datastructure) => {
 
 };
 
-export default queueVis;
+export default priorityQueueVis;

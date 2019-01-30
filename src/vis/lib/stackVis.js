@@ -5,7 +5,6 @@
  * @param {Object} [renderer] d3 render object
  * @param {Object} [datastructure] jagu datastructure
  */
-import util from '../util/util';
 
 const stackVis = (renderer, datastructure) => {
 

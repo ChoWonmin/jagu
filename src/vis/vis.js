@@ -9,6 +9,7 @@
 import * as d3 from 'd3';
 import stackVis from './lib/stackVis';
 import queueVis from './lib/queueVis';
+import priorityQueueVis from './lib/priorityQueueVis';
 
 const isBrowser = new Function("try {return this===window;}catch(e){ return false;}");
 
@@ -23,10 +24,12 @@ if(isBrowser()) {
 
     const stack = () => stackVis(renderer, data);
     const queue = () => queueVis(renderer, data);
+    const priorityQueue = () => priorityQueueVis(renderer, data);
 
     return {
       stack,
-      queue
+      queue,
+      priorityQueue
     }
 
   };
