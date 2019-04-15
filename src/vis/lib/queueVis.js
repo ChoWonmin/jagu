@@ -101,6 +101,7 @@ const queueVis = (renderer, datastructure) => {
   };
 
   const enqueue = (ele) => {
+
     if (!lock) {
       lock = true;
 
@@ -122,13 +123,10 @@ const queueVis = (renderer, datastructure) => {
         });
 
     }
-
-
   };
 
   const dequeue = () => {
-
-    if (!lock) {
+    if (!lock && foregroundG.selectAll('rect').size() > 0) {
       lock = true;
       data.dequeue();
 
@@ -148,25 +146,26 @@ const queueVis = (renderer, datastructure) => {
           front.rect.remove();
           front.text.remove();
 
-          foregroundG.selectAll('rect').transition()
-            .delay(duration)
-            .duration(duration)
-            .attr('y', (e,i) => height - (boxProps.height + boxProps.padding) * (i+1));
+          if (foregroundG.selectAll('text').size()>0) {
+            foregroundG.selectAll('rect').transition()
+              .delay(duration)
+              .duration(duration)
+              .attr('y', (e,i) => height - (boxProps.height + boxProps.padding) * (i+1));
 
-          foregroundG.selectAll('text').transition()
-            .delay(duration)
-            .duration(duration)
-            .attr('y', (e,i) => height + boxProps.height/2 - (boxProps.height + boxProps.padding) * (i+1))
-            .on('end', ()=>{
-              lock = false;
-            });
+            foregroundG.selectAll('text').transition()
+              .delay(duration)
+              .duration(duration)
+              .attr('y', (e,i) => height + boxProps.height/2 - (boxProps.height + boxProps.padding) * (i+1))
+              .on('end', ()=>{
+                lock = false;
+              });
+          } else {
+            lock = false;
+          }
+
+
         });
     }
-
-
-
-
-
   };
 
   const clear = () => {

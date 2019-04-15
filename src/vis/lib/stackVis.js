@@ -123,8 +123,7 @@ const stackVis = (renderer, datastructure) => {
   };
 
   const pop = () => {
-
-    if (!lock) {
+    if (!lock && foregroundG.selectAll('rect').size() > 0) {
       lock = true;
       data.pop();
 
@@ -140,7 +139,7 @@ const stackVis = (renderer, datastructure) => {
       top.text.transition()
         .duration(duration)
         .attr('y', - boxProps.height)
-        .on('end', ()=>{
+        .on('end', () => {
           top.rect.remove();
           top.text.remove();
           lock = false;
