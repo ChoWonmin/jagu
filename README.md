@@ -3,7 +3,7 @@
 > Data Structure and Visualization javascript library
 
 ### Document Page
-http://www.wonmin.xyz:8080/
+https://github.com/ChoWonmin
 
 ## Install
 
