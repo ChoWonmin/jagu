@@ -1,9 +1,8 @@
 # jagu
-
 > Data Structure and Visualization javascript library
 
 ### Document Page
-https://github.com/ChoWonmin
+https://chowonmin.github.io/jagu-doc/
 
 ## Install
 

@@ -19,6 +19,10 @@ const priorityQueueVis = (renderer, datastructure) => {
 
   const data = datastructure;
 
+  /**
+   * animation synchronize check
+   * @property {boolean}
+   */
   let lock = false;
 
   const margin = 30;
@@ -31,28 +35,37 @@ const priorityQueueVis = (renderer, datastructure) => {
     padding: 6
   };
 
-  const duration = 1000;
+  const duration = 400;
 
-  const drawBox = (x, y, text) => {
+  const drawBox = (x, y, text, priority) => {
     const rect = foregroundG.append('rect')
       .attr('x', x)
       .attr('y', y)
       .attr('width', boxProps.width - 2 * boxProps.padding)
       .attr('height', boxProps.height)
-      .attr('fill', '#eee17f')
+      .attr('fill', boxProps.color)
       .attr('opacity', 1);
 
     const t = foregroundG.append('text')
       .attr('x', x + boxProps.width/2 - 4)
       .attr('y', y + boxProps.height/2)
-      .attr('fill', '#4b4b4b')
+      .attr('fill', boxProps.fontColor)
       .attr('alignment-baseline', 'middle')
       .attr('text-anchor', 'middle')
       .text(text);
 
+    const p = foregroundG.append('text')
+      .attr('x', x + 14)
+      .attr('y', y + boxProps.height/2)
+      .attr('fill', boxProps.fontColor)
+      .attr('alignment-baseline', 'middle')
+      .attr('text-anchor', 'middle')
+      .text(priority);
+
     return {
       rect,
-      text: t
+      text: t,
+      priority: p
     };
   };
 
@@ -90,58 +103,84 @@ const priorityQueueVis = (renderer, datastructure) => {
       .attr('fill', '#adefde');
 
     data.toArray().forEach( (e,i) => {
-      const box = drawBox(margin + boxProps.padding, height - (boxProps.height + boxProps.padding) * (i+1), e);
-
-      box.rect
-        .transition()
-        .duration(duration)
-        .attr('fill', boxProps.color);
-
-      box.text
-        .transition()
-        .duration(duration)
-        .attr('fill', boxProps.fontColor);
+      console.log(e);
+      drawBox(margin + boxProps.padding, height - (boxProps.height + boxProps.padding) * (i+1), e);
     });
 
     scroll(foregroundG);
   };
 
   const enqueue = (ele, priority) => {
-    data.enqueue(ele, priority);
-    draw();
+
+    if (!lock) {
+      lock = true;
+
+      data.enqueue(ele, priority);
+
+      const box = drawBox(margin + boxProps.padding, 0, ele, priority);
+
+      box.rect
+        .transition()
+        .duration(duration)
+        .attr('y', height - (boxProps.height + boxProps.padding) * (data.toArray().length));
+
+      box.priority
+        .transition()
+        .duration(duration)
+        .attr('y', height + boxProps.height/2 - (boxProps.height + boxProps.padding) * (data.toArray().length))
+
+      box.text
+        .transition()
+        .duration(duration)
+        .attr('y', height + boxProps.height/2 - (boxProps.height + boxProps.padding) * (data.toArray().length))
+        .on('end', ()=>{
+          lock = false;
+        });
+
+    }
   };
 
   const dequeue = () => {
-    data.dequeue();
+    if (!lock && foregroundG.selectAll('rect').size() > 0) {
+      lock = true;
+      data.dequeue();
 
-    const front = {
-      rect: foregroundG.selectAll('rect').filter((d,i) => i===0),
-      text: foregroundG.selectAll('text').filter((d,i) => i===0)
-    };
+      const front = {
+        rect: foregroundG.selectAll('rect').filter((d,i) => i===0),
+        text: foregroundG.selectAll('text').filter((d,i) => i===0)
+      };
 
-    front.rect.transition()
-      .duration(duration)
-      .attr('y', height);
+      front.rect.transition()
+        .duration(duration)
+        .attr('y', height);
 
-    front.text.transition()
-      .duration(duration)
-      .attr('y', height)
-      .on('end', () => {
-        front.rect.remove();
-        front.text.remove();
+      front.text.transition()
+        .duration(duration)
+        .attr('y', height)
+        .on('end', () => {
+          front.rect.remove();
+          front.text.remove();
 
-        foregroundG.selectAll('rect').transition()
-          .delay(duration)
-          .duration(duration)
-          .attr('y', (e,i) => height - (boxProps.height + boxProps.padding) * (i+1));
+          if (foregroundG.selectAll('text').size()>0) {
+            foregroundG.selectAll('rect').transition()
+              .delay(duration)
+              .duration(duration)
+              .attr('y', (e,i) => height - (boxProps.height + boxProps.padding) * (i+1));
 
-        foregroundG.selectAll('text').transition()
-          .delay(duration)
-          .duration(duration)
-          .attr('y', (e,i) => height + boxProps.height/2 - (boxProps.height + boxProps.padding) * (i+1));
+            foregroundG.selectAll('text').transition()
+              .delay(duration)
+              .duration(duration)
+              .attr('y', (e,i) => height + boxProps.height/2 - (boxProps.height + boxProps.padding) * (i+1))
+              .on('end', ()=>{
+                lock = false;
+              });
+          } else {
+            lock = false;
+          }
 
-      });
 
+        });
+    }
   };
 
   const clear = () => {
