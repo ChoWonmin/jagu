@@ -1,10 +1,4 @@
 /**
- * datastructures-js/trie
- * @copyright 2018 Eyas Ranjous <eyas.ranjous@gmail.com>
- * @license MIT
- */
-
-/**
  * @throws {Error}
  */
 const validate = (str) => {

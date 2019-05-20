@@ -1,8 +1,3 @@
-/**
- * datastructures-js/priority-queue
- * @copyright 2018 Eyas Ranjous <eyas.ranjous@gmail.com>
- * @license MIT
- */
 const priorityQueue = () => {
   let elements = [];
   let offset = 0;

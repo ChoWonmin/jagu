@@ -1,10 +1,4 @@
 /**
- * datastructures-js/linked-list
- * @copyright 2018 Eyas Ranjous <eyas.ranjous@gmail.com>
- * @license MIT
- */
-
-/**
  * Linked List Node
  * @function
  */

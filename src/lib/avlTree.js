@@ -1,10 +1,4 @@
 /**
- * datastructures-js/avl-tree
- * @copyright 2018 Eyas Ranjous <eyas.ranjous@gmail.com>
- * @license MIT
- */
-
-/**
  * avl tree node
  * @function
  */

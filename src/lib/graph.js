@@ -1,8 +1,3 @@
-/**
- * datastructures-js/graph
- * @copyright 2018 Eyas Ranjous <eyas.ranjous@gmail.com>
- * @license MIT
- */
 import queueFn from './queue';
 
 /**
