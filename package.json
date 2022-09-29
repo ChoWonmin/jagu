@@ -35,7 +35,7 @@
     "babel-preset-env": "^1.7.0",
     "babelify": "^8.0.0",
     "browserify": "^16.2.3",
-    "d3": "^5.7.0",
+    "d3": "^7.6.1",
     "path": "^0.12.7",
     "webpack": "^4.28.3",
     "webpack-cli": "^3.1.2"
